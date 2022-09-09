@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Recognizing Handwritten Digits | fastpages</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Recognizing Handwritten Digits" />
+<meta name="author" content="Sumanashree" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Data analysis is not limited to numbers and strings, because images and sounds can also be analyzed and classified." />
+<meta property="og:description" content="Data analysis is not limited to numbers and strings, because images and sounds can also be analyzed and classified." />
+<link rel="canonical" href="https://sumanashreedk.github.io/SDKBlogs/dataanalysis/2022/09/08/Recognizing-Handwritten-Digits.html" />
+<meta property="og:url" content="https://sumanashreedk.github.io/SDKBlogs/dataanalysis/2022/09/08/Recognizing-Handwritten-Digits.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-08T00:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Recognizing Handwritten Digits" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sumanashree"},"dateModified":"2022-09-08T00:00:00-05:00","datePublished":"2022-09-08T00:00:00-05:00","description":"Data analysis is not limited to numbers and strings, because images and sounds can also be analyzed and classified.","headline":"Recognizing Handwritten Digits","mainEntityOfPage":{"@type":"WebPage","@id":"https://sumanashreedk.github.io/SDKBlogs/dataanalysis/2022/09/08/Recognizing-Handwritten-Digits.html"},"url":"https://sumanashreedk.github.io/SDKBlogs/dataanalysis/2022/09/08/Recognizing-Handwritten-Digits.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/SDKBlogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://sumanashreedk.github.io/SDKBlogs/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/SDKBlogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/SDKBlogs/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/SDKBlogs/about/">About Me</a><a class="page-link" href="/SDKBlogs/search/">Search</a><a class="page-link" href="/SDKBlogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Recognizing Handwritten Digits</h1><p class="page-description">Data analysis is not limited to numbers and strings, because images and sounds can also be analyzed and classified.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-09-08T00:00:00-05:00" itemprop="datePublished">
+        Sep 8, 2022
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Sumanashree</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      6 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/SDKBlogs/categories/#DataAnalysis">DataAnalysis</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-justify-center">
+          <div class="px-2">
+
+    <a href="https://github.com/Sumanashreedk/SDKBlogs/tree/master/_notebooks/2022-09-08-Recognizing-Handwritten-Digits.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/SDKBlogs/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/Sumanashreedk/SDKBlogs/master?filepath=_notebooks%2F2022-09-08-Recognizing-Handwritten-Digits.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/SDKBlogs/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/Sumanashreedk/SDKBlogs/blob/master/_notebooks/2022-09-08-Recognizing-Handwritten-Digits.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/SDKBlogs/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+          <div class="px-2">
+  <a href="https://deepnote.com/launch?url=https%3A%2F%2Fgithub.com%2FSumanashreedk%2FSDKBlogs%2Fblob%2Fmaster%2F_notebooks%2F2022-09-08-Recognizing-Handwritten-Digits.ipynb" target="_blank">
+      <img class="notebook-badge-image" src="/SDKBlogs/assets/badges/deepnote.svg" alt="Launch in Deepnote"/>
+  </a>
+</div>
+
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#Introduction">Introduction </a></li>
+<li class="toc-entry toc-h2"><a href="#Conclusion">Conclusion </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#"I-am-thankful-to-mentors-at-https://internship.suvenconsultants.com-for-providing-awesome-problem-statements-and-giving-many-of-us-a-Coding-Internship-Exprience.-Thank-you-www.suvenconsultants.com"">&quot;I am thankful to mentors at https://internship.suvenconsultants.com for providing awesome problem statements and giving many of us a Coding Internship Exprience. Thank you www.suvenconsultants.com&quot; </a></li>
+</ul>
+</li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2022-09-08-Recognizing-Handwritten-Digits.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Introduction">
+<a class="anchor" href="#Introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction<a class="anchor-link" href="#Introduction"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Recognizing handwritten text is a problem that can be traced back to the first automatic 
+machines that needed to recognize individual characters in handwritten documents. 
+Think about, for example, the ZIP codes on letters at the post office and the automation 
+needed to recognize these five digits. Perfect recognition of these codes is necessary in 
+order to sort mail automatically and efficiently.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Included among the other applications that may come to mind is OCR (Optical 
+Character Recognition) software. OCR software must read handwritten text, or pages of 
+printed books, for general electronic documents in which each character is well 
+defined.
+  But the problem of handwriting recognition goes farther back in time, more 
+precisely to the early 20th Century (1920s), when Emanuel Goldberg (1881–1970) began 
+his studies regarding this issue and suggested that a statistical approach would be an 
+optimal choice.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>To address this issue in Python, the scikit-learn library provides a good example 
+to better understand this technique, the issues involved, and the possibility of making 
+predictions.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Let's first import the required Libraries.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Now let's import the dataset of images called digits.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">digits</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_digits</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Let’s take a look at what this DESCR (description) of the dataset shows, by printing out its contents:</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>.. _digits_dataset:
+
+Optical recognition of handwritten digits dataset
+--------------------------------------------------
+
+**Data Set Characteristics:**
+
+    :Number of Instances: 1797
+    :Number of Attributes: 64
+    :Attribute Information: 8x8 image of integer pixels in the range 0..16.
+    :Missing Attribute Values: None
+    :Creator: E. Alpaydin (alpaydin '@' boun.edu.tr)
+    :Date: July; 1998
+
+This is a copy of the test set of the UCI ML hand-written digits datasets
+https://archive.ics.uci.edu/ml/datasets/Optical+Recognition+of+Handwritten+Digits
+
+The data set contains images of hand-written digits: 10 classes where
+each class refers to a digit.
+
+Preprocessing programs made available by NIST were used to extract
+normalized bitmaps of handwritten digits from a preprinted form. From a
+total of 43 people, 30 contributed to the training set and different 13
+to the test set. 32x32 bitmaps are divided into nonoverlapping blocks of
+4x4 and the number of on pixels are counted in each block. This generates
+an input matrix of 8x8 where each element is an integer in the range
+0..16. This reduces dimensionality and gives invariance to small
+distortions.
+
+For info on NIST preprocessing routines, see M. D. Garris, J. L. Blue, G.
+T. Candela, D. L. Dimmick, J. Geist, P. J. Grother, S. A. Janet, and C.
+L. Wilson, NIST Form-Based Handprint Recognition System, NISTIR 5469,
+1994.
+
+.. topic:: References
+
+  - C. Kaynak (1995) Methods of Combining Multiple Classifiers and Their
+    Applications to Handwritten Digit Recognition, MSc Thesis, Institute of
+    Graduate Studies in Science and Engineering, Bogazici University.
+  - E. Alpaydin, C. Kaynak (1998) Cascading Classifiers, Kybernetika.
+  - Ken Tang and Ponnuthurai N. Suganthan and Xi Yao and A. Kai Qin.
+    Linear dimensionalityreduction using relevance weighted LDA. School of
+    Electrical and Electronic Engineering Nanyang Technological University.
+    2005.
+  - Claudio Gentile. A New Approximate Maximal Margin Classification
+    Algorithm. NIPS. 2000.
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Images attribute of the dataset stores 8*8 arrays of grayscale values for each image. Attribute shape is used get the shape of an object.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(array([[ 0.,  0.,  0., 12., 13.,  5.,  0.,  0.],
+        [ 0.,  0.,  0., 11., 16.,  9.,  0.,  0.],
+        [ 0.,  0.,  3., 15., 16.,  6.,  0.,  0.],
+        [ 0.,  7., 15., 16., 16.,  2.,  0.,  0.],
+        [ 0.,  0.,  1., 16., 16.,  3.,  0.,  0.],
+        [ 0.,  0.,  1., 16., 16.,  6.,  0.,  0.],
+        [ 0.,  0.,  1., 16., 16.,  6.,  0.,  0.],
+        [ 0.,  0.,  0., 11., 16., 10.,  0.,  0.]]),
+ (8, 8))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Let's use the function imshow() to display the data as an image.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gray_r</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">'nearest'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.image.AxesImage at 0x7f1876ba5900&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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%0A">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Target attribute of the dataset stores the digit each image represents.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">digits</span><span class="o">.</span><span class="n">target</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([0, 1, 2, ..., 8, 9, 8])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Now,let's check the number of images present in the dataset using the attribute size.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">digits</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">size</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1797</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((1797, 8, 8), (1797,))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(1797, 8, 8)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Inputs to the model should be of shape <code>No. of samples * No. of features</code>.</strong></p>
+<p><strong>So our digits inputs should be reshaped from <code>1797 * 8 * 8</code> to <code>1797 * 64</code>.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">digits</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="p">(</span><span class="n">H</span> <span class="o">*</span> <span class="n">W</span><span class="p">))</span>
+<span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(1797, 64)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>case 1 : 
+Now,we'll split the data into 80% train and 20% test subsets using train_test_split() function.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_X</span><span class="p">,</span> <span class="n">val_X</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">val_y</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="p">,</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">train_X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">val_X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">train_y</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">val_y</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((1437, 64), (360, 64), (1437,), (360,))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Let's create the RF model and fit the model to train the data and we'll predict on train and valid data using the trained model.</strong>
+<strong>Then finally with the help of the function accuracy_score()  we'll check "how accurate our model is!"</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># fit model to train data</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_X</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
+<span class="c1"># predict on train data using trained model</span>
+<span class="n">train_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_X</span><span class="p">)</span>
+<span class="c1"># predict on valid data using trained model</span>
+<span class="n">val_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">val_X</span><span class="p">)</span>
+<span class="c1"># print accuracy scores for both train and valid data</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Train accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">train_y</span><span class="p">,</span> <span class="n">train_pred</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Valid accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">val_y</span><span class="p">,</span> <span class="n">val_pred</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Train accuracy: 1.0
+Valid accuracy: 0.975
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>case 2 : Now,we'll split the data into 70% train and 30% test subsets and then calculate the accuracy of the created model.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_X</span><span class="p">,</span> <span class="n">val_X</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">val_y</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="p">,</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">train_X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">val_X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">train_y</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">val_y</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((1257, 64), (540, 64), (1257,), (540,))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># fit model to train data</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_X</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
+<span class="c1"># predict on train data using trained model</span>
+<span class="n">train_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_X</span><span class="p">)</span>
+<span class="c1"># predict on valid data using trained model</span>
+<span class="n">val_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">val_X</span><span class="p">)</span>
+<span class="c1"># print accuracy scores for both train and valid data</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Train accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">train_y</span><span class="p">,</span> <span class="n">train_pred</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Valid accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">val_y</span><span class="p">,</span> <span class="n">val_pred</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Train accuracy: 1.0
+Valid accuracy: 0.9722222222222222
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>case 3 : Next,split the data into 60% train and 40% test subsets and then calculate the accuracy of the created model.</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_X</span><span class="p">,</span> <span class="n">val_X</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">val_y</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="p">,</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">train_X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">val_X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">train_y</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">val_y</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((1078, 64), (719, 64), (1078,), (719,))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># fit model to train data</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_X</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
+<span class="c1"># predict on train data using trained model</span>
+<span class="n">train_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_X</span><span class="p">)</span>
+<span class="c1"># predict on valid data using trained model</span>
+<span class="n">val_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">val_X</span><span class="p">)</span>
+<span class="c1"># print accuracy scores for both train and valid data</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Train accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">train_y</span><span class="p">,</span> <span class="n">train_pred</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Valid accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">val_y</span><span class="p">,</span> <span class="n">val_pred</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Train accuracy: 1.0
+Valid accuracy: 0.972183588317107
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">
+<a class="anchor" href="#Conclusion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusion<a class="anchor-link" href="#Conclusion"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>From the code above, we can see that, " In all the 3 cases the accuracy of our model is greater than 95% ". This means that it predicts the digit accurately greater than 95% of the times. " Hence the tested Hypothesis is accepted....."</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id='"I-am-thankful-to-mentors-at-https://internship.suvenconsultants.com-for-providing-awesome-problem-statements-and-giving-many-of-us-a-Coding-Internship-Exprience.-Thank-you-www.suvenconsultants.com"'>
+<a class="anchor" href="#" aria-hidden="true" i-am-thankful-to-mentors-at-https:=""><span class="octicon octicon-link"></span></a>"I am thankful to mentors at <a href="https://internship.suvenconsultants.com">https://internship.suvenconsultants.com</a> for providing awesome problem statements and giving many of us a Coding Internship Exprience. Thank you www.suvenconsultants.com"<a class="anchor-link" href="#%22I-am-thankful-to-mentors-at-https://internship.suvenconsultants.com-for-providing-awesome-problem-statements-and-giving-many-of-us-a-Coding-Internship-Exprience.-Thank-you-www.suvenconsultants.com%22"> </a>
+</h4>
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="Sumanashreedk/SDKBlogs"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/SDKBlogs/dataanalysis/2022/09/08/Recognizing-Handwritten-Digits.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/SDKBlogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/SDKBlogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/SDKBlogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" target="_blank" title="fastai"><svg class="svg-icon grey"><use xlink:href="/SDKBlogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" target="_blank" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/SDKBlogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
